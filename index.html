@@ -55,6 +55,22 @@
       { location: [40.7128, -74.006], size: 0.05 }, // USA
       { location: [35.6762, 139.6503], size: 0.05 } // Japan
     ],
+    
+ arcs: [
+    { from: [37.78, -122.44], to: [40.71, -74.01] },
+  ],
+  arcColor: [0.3, 0.5, 1],
+  arcWidth: 0.5,
+  arcHeight: 0.3,
+})
+
+// Animate the globe
+let phi = 0
+function animate() {
+  phi += 0.005
+  globe.update({ phi })
+  requestAnimationFrame(animate)
+}
 
     onRender: (state) => {
       state.phi = phi;
