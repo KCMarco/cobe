@@ -82,6 +82,27 @@
       position-anchor: --cobe-tokyo;
       opacity: var(--cobe-visible-tokyo, 0);
     }
+
+.pulse-berlin {
+  position-anchor: --cobe-berlin;
+  opacity: var(--cobe-visible-berlin, 0);
+}
+
+.pulse-dubai {
+  position-anchor: --cobe-dubai;
+  opacity: var(--cobe-visible-dubai, 0);
+}
+
+.pulse-sydney {
+  position-anchor: --cobe-sydney;
+  opacity: var(--cobe-visible-sydney, 0);
+}
+
+.pulse-saopaulo {
+  position-anchor: --cobe-saopaulo;
+  opacity: var(--cobe-visible-saopaulo, 0);
+}
+    
   </style>
 </head>
 <body>
@@ -118,11 +139,16 @@
       markerColor: [0.01, 1, 0.51],
       glowColor: [0.3, 0.6, 1],
 
-      markers: [
-        { location: [51.5142, 7.4653], size: 0.06, id: "de" },
-        { location: [40.7128, -74.006], size: 0.05, id: "ny" },
-        { location: [35.6762, 139.6503], size: 0.05, id: "tokyo" }
-      ]
+markers: [
+  { location: [51.5142, 7.4653], size: 0.06, id: "de" },
+  { location: [40.7128, -74.006], size: 0.05, id: "ny" },
+  { location: [35.6762, 139.6503], size: 0.05, id: "tokyo" },
+
+  { location: [52.52, 13.405], size: 0.05, id: "berlin" },
+  { location: [25.2048, 55.2708], size: 0.05, id: "dubai" },
+  { location: [-33.8688, 151.2093], size: 0.05, id: "sydney" },
+  { location: [-23.5505, -46.6333], size: 0.05, id: "saopaulo" }
+]
     });
 
     function animate() {
