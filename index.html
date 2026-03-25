@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cobe Globe</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    canvas {
+      width: 600px;
+      height: 600px;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="globe"></canvas>
+
+<script type="module">
+  import createGlobe from "https://esm.sh/cobe";
+
+  const canvas = document.getElementById("globe");
+
+  let phi = 0;
+
+  createGlobe(canvas, {
+    devicePixelRatio: 2,
+    width: 600 * 2,
+    height: 600 * 2,
+
+    phi: 0,
+    theta: 0.3,
+
+    dark: 1,
+    diffuse: 1.2,
+
+    mapSamples: 20000,
+    mapBrightness: 6,
+
+    baseColor: [0.1, 0.2, 0.4],
+    markerColor: [0.2, 0.8, 1],
+    glowColor: [0.3, 0.6, 1],
+
+    markers: [
+      { location: [51.5142, 7.4653], size: 0.06 }, // Deutschland
+      { location: [40.7128, -74.006], size: 0.05 }, // USA
+      { location: [35.6762, 139.6503], size: 0.05 } // Japan
+    ],
+
+    onRender: (state) => {
+      state.phi = phi;
+      phi += 0.005;
+    },
+  });
+</script>
+
+</body>
+</html>
