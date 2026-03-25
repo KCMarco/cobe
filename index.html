@@ -3,90 +3,65 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Globe (cobe)</title>
+  <title>Cobe Globe</title>
+
   <style>
     html, body {
       margin: 0;
-      width: 100%;
-      min-height: 100%;
-      background: #ececec;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    }
-
-    .stage {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .globe-wrap {
-      width: min(88vmin, 860px);
-      aspect-ratio: 1 / 1;
-    }
-
-    #globe {
-      width: 100%;
       height: 100%;
-      display: block;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    canvas {
+      width: 600px;
+      height: 600px;
     }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <div class="globe-wrap">
-      <canvas id="globe"></canvas>
-    </div>
-  </main>
 
-  <script type="module">
-    import createGlobe from 'https://cdn.jsdelivr.net/npm/cobe@0.6.5/dist/index.esm.js'
+<canvas id="globe"></canvas>
 
-    const canvas = document.getElementById('globe')
-    let phi = 0
-    let width = 0
+<script type="module">
+  import createGlobe from "https://esm.sh/cobe";
 
-    const markers = [
-      // ungefähr wie im Beispielbild
-      { location: [26.1224, -80.1373], size: 0.09 },  // Florida
-      { location: [-23.5505, -46.6333], size: 0.09 }, // São Paulo
-      { location: [-33.8688, 151.2093], size: 0.03 }, // kleiner Punkt
-      { location: [-8.4095, 115.1889], size: 0.025 }, // kleiner Punkt
-    ]
+  const canvas = document.getElementById("globe");
 
-    const markerColor = [0.11, 0.33, 0.95]
+  let phi = 0;
 
-    function resize() {
-      width = canvas.offsetWidth
-      canvas.width = width * devicePixelRatio
-      canvas.height = width * devicePixelRatio
-    }
+  createGlobe(canvas, {
+    devicePixelRatio: 2,
+    width: 600 * 2,
+    height: 600 * 2,
 
-    resize()
-    addEventListener('resize', resize)
+    phi: 0,
+    theta: 0.3,
 
-    createGlobe(canvas, {
-      devicePixelRatio,
-      width: width * devicePixelRatio,
-      height: width * devicePixelRatio,
-      phi: 0,
-      theta: 0.35,
-      dark: 1,
-      diffuse: 3,
-      mapSamples: 16000,
-      mapBrightness: 1.2,
-      baseColor: [0.35, 0.35, 0.35],
-      markerColor,
-      glowColor: [1, 1, 1],
-      markers,
-      onRender: (state) => {
-        state.width = width * devicePixelRatio
-        state.height = width * devicePixelRatio
-        state.phi = phi
-        phi += 0.0035
-      },
-    })
-  </script>
+    dark: 1,
+    diffuse: 1.2,
+
+    mapSamples: 20000,
+    mapBrightness: 6,
+
+    baseColor: [0.1, 0.2, 0.4],
+    markerColor: [0.2, 0.8, 1],
+    glowColor: [0.3, 0.6, 1],
+
+    markers: [
+      { location: [51.5142, 7.4653], size: 0.06 }, // Deutschland
+      { location: [40.7128, -74.006], size: 0.05 }, // USA
+      { location: [35.6762, 139.6503], size: 0.05 } // Japan
+    ],
+
+    onRender: (state) => {
+      state.phi = phi;
+      phi += 0.005;
+    },
+  });
+</script>
+
 </body>
 </html>
