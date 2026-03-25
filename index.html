@@ -1,48 +1,102 @@
-<script type="module">
-  import createGlobe from "https://esm.sh/cobe";
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitHub Pages Globe</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #0d1b3d 0%, #060b16 70%);
+      overflow: hidden;
+      color: #dbeafe;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
 
-  const canvas = document.getElementById("globe");
+    .wrap {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+    }
 
-  let phi = 0;
+    canvas {
+      width: min(92vmin, 560px);
+      aspect-ratio: 1 / 1;
+      height: auto;
+      display: block;
+      background: transparent;
+    }
 
-  const globe = createGlobe(canvas, {
-    devicePixelRatio: 2,
-    width: 600 * 2,
-    height: 600 * 2,
+    .status {
+      position: fixed;
+      left: 12px;
+      bottom: 12px;
+      font-size: 12px;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <canvas id="globe"></canvas>
+  </div>
+  <div id="status" class="status">Lade Globe …</div>
 
-    phi: 0,
-    theta: 0.2,
+  <script type="module">
+    const statusEl = document.getElementById('status')
 
-    dark: 0,
-    diffuse: 1.2,
+    try {
+      const { default: createGlobe } = await import('https://cdn.jsdelivr.net/npm/cobe@0.6.5/dist/index.esm.js')
 
-    mapSamples: 16000,
-    mapBrightness: 6,
+      const canvas = document.getElementById('globe')
+      let phi = 0
+      let width = 0
 
-    baseColor: [1, 1, 1],
-    markerColor: [0.2, 0.4, 1],
-    glowColor: [1, 1, 1],
+      const markers = [
+        { location: [52.52, 13.405], size: 0.055 },
+        { location: [40.7128, -74.006], size: 0.045 },
+        { location: [35.6762, 139.6503], size: 0.045 },
+      ]
 
-    markers: [
-      { location: [37.78, -122.44], size: 0.03, id: 'sf' },
-      { location: [40.71, -74.01], size: 0.03, id: 'nyc' },
-    ],
+      function resize() {
+        width = canvas.offsetWidth
+        canvas.width = width * devicePixelRatio
+        canvas.height = width * devicePixelRatio
+      }
 
-    arcs: [
-      { from: [37.78, -122.44], to: [40.71, -74.01] },
-    ],
+      resize()
+      addEventListener('resize', resize)
 
-    arcColor: [0.3, 0.5, 1],
-    arcWidth: 0.5,
-    arcHeight: 0.3,
-  });
+      createGlobe(canvas, {
+        devicePixelRatio,
+        width: width * devicePixelRatio,
+        height: width * devicePixelRatio,
+        phi: 0,
+        theta: 0.28,
+        dark: 1,
+        diffuse: 1.2,
+        mapSamples: 16000,
+        mapBrightness: 2.2,
+        baseColor: [0.25, 0.35, 0.7],
+        markerColor: [0.87, 0.95, 1],
+        glowColor: [0.35, 0.5, 1],
+        markers,
+        onRender: (state) => {
+          state.phi = phi
+          state.width = width * devicePixelRatio
+          state.height = width * devicePixelRatio
+          phi += 0.004
+        },
+      })
 
-  // Animation
-  function animate() {
-    phi += 0.005;
-    globe.update({ phi });
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-</script>
+      statusEl.textContent = 'Globe geladen.'
+    } catch (err) {
+      console.error(err)
+      statusEl.textContent = 'Fehler beim Laden (CDN geblockt?). Bitte ohne Adblock/mit anderem Browser testen.'
+    }
+  </script>
+</body>
+</html>
